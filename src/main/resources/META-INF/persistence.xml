@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             version="2.2">
+    <persistence-unit name="airlinePU">
+        <class>com.myairline.airline_reservation.model.Flight</class>
+        <properties>
+            <property name="jakarta.persistence.jdbc.url"    value="jdbc:postgresql://localhost:5433/AirlineReservation"/>
+            <property name="jakarta.persistence.jdbc.user"   value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value="timur1234"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto"         value="update"/>
+            <property name="hibernate.show_sql"             value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

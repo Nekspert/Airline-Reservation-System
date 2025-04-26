@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.myairline.airline_reservation.ui.MainController"
+            styleClass="root-pane">
+
+    <!-- ■ Top: заголовок и кнопки глобальных действий -->
+    <top>
+        <ToolBar>
+            <Label text="Airline Dashboard" styleClass="app-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Refresh" onAction="#onRefreshAll"/>
+            <Button text="Settings" onAction="#onSettings"/>
+        </ToolBar>
+    </top>
+
+    <!-- ■ Left: навигация по сущностям -->
+    <left>
+        <VBox spacing="10" styleClass="nav-pane">
+            <Label text="Навигация" styleClass="nav-title"/>
+            <ListView fx:id="navList" prefWidth="150"/>
+        </VBox>
+    </left>
+
+    <!-- ■ Center: контент выбранного раздела -->
+    <center>
+        <StackPane fx:id="contentPane" styleClass="content-pane"/>
+    </center>
+
+</BorderPane>

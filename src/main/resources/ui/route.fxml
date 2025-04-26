@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.myairline.airline_reservation.ui.RouteController"
+      spacing="8"
+      styleClass="section-pane">
+
+
+    <TextField fx:id="originField"
+               promptText="Откуда"/>
+    <TextField fx:id="destinationField"
+               promptText="Куда"/>
+    <TextField fx:id="durationField"
+               promptText="Длительность (мин)"/>
+    <Button text="Добавить маршрут"
+            onAction="#onAddRoute"/>
+    <ListView fx:id="routeList"
+              prefHeight="120"/>
+</VBox>

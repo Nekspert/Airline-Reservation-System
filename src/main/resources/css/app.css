@@ -1,0 +1,38 @@
+.root-pane {
+    -fx-background-color: #f4f4f4;
+    -fx-padding: 10;
+}
+
+.tool-bar {
+    -fx-background-color: #2c3e50;
+}
+
+.app-title {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.nav-pane {
+    -fx-background-color: #34495e;
+    -fx-text-fill: white;
+}
+
+.section-pane {
+    -fx-background-color: white;
+    -fx-border-color: #dcdcdc;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+}
+
+
+.nav-title {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.content-pane {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10;
+}
