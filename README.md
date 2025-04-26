@@ -1,67 +1,46 @@
-# Airline-Reservation-System
-Курсовая работа по JAVA OOP: Приложение для учёта проданных билетов авиакомпании
+# ✈️ Airline Reservation System
 
-Планируемые сущности и связи:
-classDiagram
-    Flight "1" o-- "1" Airplane
-    Flight "1" o-- "2..*" CrewMember
-    Flight "1" o-- "2..*" Seat
-    Flight "1" o-- "1" Route
-    Booking "1" -- "1" Flight
-    Booking "1" -- "1" Passenger
-    Booking "1" -- "1" Ticket
-    Ticket "1" -- "1" Tariff
-    Payment "1" -- "1" Booking
-    User <|-- Agent
-    User <|-- Admin
-•	Flight: привязка к Airplane, Route, списки Seat и CrewMember.
-•	Route: «откуда → куда» с длительностью и промежуточными точками.
-•	Booking: оформленная бронь, связывает Passenger, Flight, Ticket.
-•	Tariff: базовый класс для тарифов; потомки TariffFlexible, TariffBusiness и т. д.
-•	Payment: связывает бронь и итоговый платёж.
-•	User: роли (Agent, Admin) для контроля доступа.
+A Java OOP coursework project for managing airline tickets, bookings, flights, and user roles. Built with JavaFX, Hibernate, and PostgreSQL.
 
+![Java](https://img.shields.io/badge/Java-21-red)
+![Hibernate](https://img.shields.io/badge/Hibernate-5.6.15.Final-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-10-blue)
+![JavaFX](https://img.shields.io/badge/JavaFX-19-orange)
 
-Слои приложения
-┌────────────────────┐
-│      UI Layer      │   ← JavaFX
-└────────────────────┘
-          ↓
-┌────────────────────┐
-│ Service Layer      │   ← бизнес-логика, паттерны (Strategy, Factory)
-└────────────────────┘
-          ↓
-┌────────────────────┐
-│ Repository/DAO     │   ← JPA/Hibernate-репозитории
-└────────────────────┘
-          ↓
-┌────────────────────┐
-│   Database Layer   │   ← PostgreSQL.
-└────────────────────┘
+## 🌟 Features
+- **Flight Management**: Create flights with airplanes, routes, seats, and crew members
+- **Ticket Booking**: Flexible booking system with multiple tariff options (Business/Flexible)
+- **Role-Based Access**: Admin and Agent roles with different privileges
+- **Payment Integration**: Track payments associated with bookings
+- **Advanced Search**: Find flights by route, aircraft, or availability
 
+## 🛠️ Technologies
+- **Frontend**: JavaFX + FXML
+- **Backend**: Java 21
+- **ORM**: Hibernate 5.6
+- **Database**: PostgreSQL 10
+- **Build Tool**: Maven
+- **Architecture**: Layered (UI → Service → DAO → DB)
 
-Настройка среды и пустого проекта:
-1.	IDE и инструменты
-o	Установите IntelliJ IDEA Community или Eclipse.
-o	JDK 11+ (рекомендуется JDK 17).
+## 🗄️ Database Schema
+```plaintext
+[Airplane] ←1─ [Flight] 1→ [Route]
+               ↑1     1↓
+[Booking] ↔1─ [Ticket] ↔1─ [Tariff]
+  ↑1          ↑1
+[Payment]  [Passenger]
+```
+## 📁 Project Structure
 
-2.	Сборщик и зависимости
-o	Создайте Maven.
-o	Добавьте в pom.xml/build.gradle:
-o	javafx-controls, javafx-fxml
-o	hibernate-core, hibernate-entitymanager
-o	JDBC-драйвер для вашей СУБД.
-
-3.	Структура пакетов
+```plaintext
 com.myairline.airline_reservation
-├── app          // точка входа в приложение (MainApp)
-├── ui           // контроллеры JavaFX + FXML
-├── model        // JPA-сущности (Entity)
-├── dao          // репозитории / DAO (если без Spring Data — тут реализации)
-├── repository   // интерфейсы Spring Data JPA (если с Spring)
-├── service      // бизнес-логика, сервисы, паттерны
-└── utils         // утилиты (HibernateUtil, AppConfig, константы)
-
-Общая схема работы:
-JavaFX UI (FXML) → MainController → FlightService → FlightDAO → JPA/Hibernate → База данных
-
+├── app/          # Main application class
+├── ui/           # JavaFX controllers + FXML
+├── model/        # JPA Entities
+│   ├── Flight.java
+│   ├── Ticket.java
+│   └── ... 
+├── dao/          # Data Access Objects
+├── service/      # Business logic layer
+└── utils/    # JPAUtil
+└── repository/    # in process...
