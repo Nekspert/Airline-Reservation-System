@@ -43,4 +43,3 @@ com.myairline.airline_reservation
 ├── dao/          # Data Access Objects
 ├── service/      # Business logic layer
 └── utils/    # JPAUtil
-└── repository/    # in process...
