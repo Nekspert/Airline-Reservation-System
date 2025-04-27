@@ -8,11 +8,11 @@ A Java OOP coursework project for managing airline tickets, bookings, flights, a
 ![JavaFX](https://img.shields.io/badge/JavaFX-19-orange)
 
 ## 🌟 Features
-- **Flight Management**: Create flights with airplanes, routes, seats, and crew members
+- **Flight Management**: Create flights, routes
 - **Ticket Booking**: Flexible booking system with multiple tariff options (Business/Flexible)
 - **Role-Based Access**: Admin and Agent roles with different privileges
 - **Payment Integration**: Track payments associated with bookings
-- **Advanced Search**: Find flights by route, aircraft, or availability
+- **Advanced Search**: Find flights by route, or availability
 
 ## 🛠️ Technologies
 - **Frontend**: JavaFX + FXML
@@ -24,7 +24,7 @@ A Java OOP coursework project for managing airline tickets, bookings, flights, a
 
 ## 🗄️ Database Schema
 ```plaintext
-[Airplane] ←1─ [Flight] 1→ [Route]
+[Flight] 1→ [Route]
                ↑1     1↓
 [Booking] ↔1─ [Ticket] ↔1─ [Tariff]
   ↑1          ↑1
