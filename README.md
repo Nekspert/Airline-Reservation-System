@@ -25,7 +25,7 @@ A Java OOP coursework project for managing airline tickets, bookings, flights, a
 ## 🗄️ Database Schema
 ```plaintext
 [Flight] 1→ [Route]
-               ↑1     1↓
+               ↑1     
 [Booking] ↔1─ [Ticket] ↔1─ [Tariff]
   ↑1          ↑1
 [Payment]  [Passenger]
