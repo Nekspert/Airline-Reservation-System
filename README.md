@@ -5,7 +5,7 @@ A Java OOP coursework project for managing airline tickets, bookings, flights, a
 ![Java](https://img.shields.io/badge/Java-21-red)
 ![Hibernate](https://img.shields.io/badge/Hibernate-5.6.15.Final-green)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-10-blue)
-![JavaFX](https://img.shields.io/badge/JavaFX-19-orange)
+![JavaFX](https://img.shields.io/badge/JavaFX-17-orange)
 
 ## 🌟 Features
 - **Flight Management**: Create flights, routes
