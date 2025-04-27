@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.myairline.airline_reservation.ui.TariffController"
+            prefWidth="600" prefHeight="400">
+    <!-- Основной контейнер с отступами -->
+    <VBox spacing="10"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          styleClass="root-pane">
+
+        <!-- Заголовок страницы -->
+        <Label text="Управление тарифами" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+        <!-- Контент: форма и список -->
+        <HBox spacing="10" VBox.vgrow="ALWAYS">
+            <!-- Левая часть: форма -->
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Тип тарифа"/>
+                <ComboBox fx:id="typeCombo"/>
+
+                <Label text="Название"/>
+                <TextField fx:id="nameField"/>
+
+                <Label text="Базовая цена"/>
+                <TextField fx:id="basePriceField"/>
+
+                <Label text="Описание"/>
+                <TextArea fx:id="descriptionField" prefRowCount="3" VBox.vgrow="ALWAYS"/>
+
+                <Button text="Добавить тариф" onAction="#onAddTariff" maxWidth="Infinity"/>
+                <Region VBox.vgrow="ALWAYS"/>
+            </VBox>
+
+            <!-- Правая часть: список тарифов с контекстным меню удаления -->
+            <ListView fx:id="tariffList" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                <contextMenu>
+                    <ContextMenu>
+                        <items>
+                            <MenuItem text="Удалить" onAction="#onDeleteTariff"/>
+                        </items>
+                    </ContextMenu>
+                </contextMenu>
+            </ListView>
+        </HBox>
+    </VBox>
+</AnchorPane>

@@ -2,11 +2,14 @@ package com.myairline.airline_reservation.app;
 
 import com.myairline.airline_reservation.dao.FlightDAO;
 import com.myairline.airline_reservation.dao.RouteDAO;
+import com.myairline.airline_reservation.dao.TariffDAO;
 import com.myairline.airline_reservation.service.FlightService;
 import com.myairline.airline_reservation.service.RouteService;
+import com.myairline.airline_reservation.service.TariffService;
 import com.myairline.airline_reservation.ui.FlightController;
 import com.myairline.airline_reservation.ui.MainController;
 import com.myairline.airline_reservation.ui.RouteController;
+import com.myairline.airline_reservation.ui.TariffController;
 import com.myairline.airline_reservation.utils.JPAUtil;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.application.Application;
@@ -19,6 +22,7 @@ import java.util.Objects;
 public class MainApp extends Application {
     private FlightService flightService;
     private RouteService routeService;
+    private TariffService tariffService;
 
     @Override
     public void init() {
@@ -26,6 +30,7 @@ public class MainApp extends Application {
         var em = emf.createEntityManager();
         this.flightService = new FlightService(new FlightDAO(em));
         this.routeService = new RouteService(new RouteDAO(em));
+        this.tariffService = new TariffService(new TariffDAO(em));
     }
 
     @Override
@@ -35,13 +40,16 @@ public class MainApp extends Application {
         // Передаём оба сервиса через замыкание
         loader.setControllerFactory(clazz -> {
             if (clazz == MainController.class) {
-                return new MainController(flightService, routeService);
+                return new MainController(flightService, routeService, tariffService);
             }
             if (clazz == FlightController.class) {
                 return new FlightController(flightService, routeService);
             }
             if (clazz == RouteController.class) {
                 return new RouteController(routeService);
+            }
+            if (clazz == TariffController.class) {
+                return new TariffController(tariffService);
             }
             throw new IllegalStateException("Unexpected controller " + clazz);
         });

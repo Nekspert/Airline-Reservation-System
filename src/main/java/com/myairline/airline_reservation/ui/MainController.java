@@ -2,11 +2,12 @@ package com.myairline.airline_reservation.ui;
 
 import com.myairline.airline_reservation.service.FlightService;
 import com.myairline.airline_reservation.service.RouteService;
+import com.myairline.airline_reservation.service.TariffService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
@@ -19,18 +20,21 @@ public class MainController {
 
     private final FlightService flightService;
     private final RouteService  routeService;
+    private final TariffService tariffService;
 
     // Конструктор вызывается из MainApp через controllerFactory
-    public MainController(FlightService flightService, RouteService routeService) {
+    public MainController(FlightService flightService, RouteService routeService, TariffService tariffService) {
         this.flightService = flightService;
         this.routeService  = routeService;
+        this.tariffService = tariffService;
     }
 
     @FXML
     public void initialize() {
         navList.getItems().setAll(
                 "Рейсы", "Маршруты", "Бронирования",
-                "Пассажиры", "Билеты", "Платежи"
+                "Пассажиры", "Билеты", "Платежи",
+                "Тарифы"
         );
 
         navList.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
@@ -55,6 +59,7 @@ public class MainController {
                 return switch (section) {
                     case "Рейсы" -> new FlightController(flightService, routeService);
                     case "Маршруты" -> new RouteController(routeService);
+                    case "Тарифы" -> new TariffController(tariffService);
 
                     // TODO: добавить другие разделы по аналогии:
                     // case "Бронирования": return new BookingController(...);
@@ -77,6 +82,7 @@ public class MainController {
             case "Пассажиры" -> "passenger_page.fxml";
             case "Билеты" -> "ticket_page.fxml";
             case "Платежи" -> "payment_page.fxml";
+            case "Тарифы"     -> "tariff_page.fxml";
             default -> throw new IllegalArgumentException("Неизвестный раздел: " + section);
         };
     }
