@@ -1,8 +1,11 @@
 package com.myairline.airline_reservation.ui;
 
+import com.myairline.airline_reservation.init.AppSession;
+import com.myairline.airline_reservation.model.user.User;
 import com.myairline.airline_reservation.service.FlightService;
 import com.myairline.airline_reservation.service.RouteService;
 import com.myairline.airline_reservation.service.TariffService;
+import com.myairline.airline_reservation.service.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +14,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainController {
     @FXML
@@ -21,26 +26,43 @@ public class MainController {
     private final FlightService flightService;
     private final RouteService  routeService;
     private final TariffService tariffService;
+    private final UserService userService;
 
     // Конструктор вызывается из MainApp через controllerFactory
-    public MainController(FlightService flightService, RouteService routeService, TariffService tariffService) {
+    public MainController(FlightService flightService, RouteService routeService, TariffService tariffService, UserService userService) {
         this.flightService = flightService;
         this.routeService  = routeService;
         this.tariffService = tariffService;
+        this.userService = userService;
     }
 
     @FXML
     public void initialize() {
-        navList.getItems().setAll(
-                "Рейсы", "Маршруты", "Бронирования",
-                "Пассажиры", "Билеты", "Платежи",
-                "Тарифы"
-        );
+        User user = AppSession.get().getCurrentUser();
+        List<String> items = new ArrayList<>();
 
+        items.add("Рейсы");
+        items.add("Маршруты");
+        items.add("Тарифы");
+
+        if (user.isAdmin()) {
+            items.addAll(List.of("Пользователи", "Все бронирования", "Все билеты", "Все платежи"));
+        } else {
+            items.addAll(List.of("Мои бронирования", "Мои билеты", "Мои платежи"));
+        }
+        navList.getItems().setAll(items);
+        //        navList.getItems().setAll(
+        //                "Рейсы", "Маршруты", "Бронирования",
+        //                "Пользователи", "Билеты", "Платежи",
+        //                "Тарифы"
+        //        );
+
+        // Слушатель для переключения разделов
         navList.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
-            loadSection(newV);
+            if (newV != null) {
+                loadSection(newV);
+            }
         });
-
         // Выбираем первый пункт по умолчанию
         navList.getSelectionModel().selectFirst();
     }
@@ -60,6 +82,7 @@ public class MainController {
                     case "Рейсы" -> new FlightController(flightService, routeService);
                     case "Маршруты" -> new RouteController(routeService);
                     case "Тарифы" -> new TariffController(tariffService);
+                    case "Пользователи" -> new UserController(userService);
 
                     // TODO: добавить другие разделы по аналогии:
                     // case "Бронирования": return new BookingController(...);
@@ -79,7 +102,7 @@ public class MainController {
             case "Рейсы" -> "flight_page.fxml";
             case "Маршруты" -> "route_page.fxml";
             case "Бронирования" -> "booking_page.fxml";
-            case "Пассажиры" -> "passenger_page.fxml";
+            case "Пользователи" -> "users_page.fxml";
             case "Билеты" -> "ticket_page.fxml";
             case "Платежи" -> "payment_page.fxml";
             case "Тарифы"     -> "tariff_page.fxml";

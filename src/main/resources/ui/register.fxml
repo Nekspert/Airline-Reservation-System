@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.myairline.airline_reservation.ui.RegisterController"
+            styleClass="root-pane">
+    <VBox spacing="20" alignment="CENTER"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- Заголовок регистрации -->
+        <Label text="Регистрация нового пользователя" styleClass="login-title"/>
+
+        <!-- Форма регистрации -->
+        <GridPane hgap="10" vgap="10" alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Имя пользователя:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="usernameField" promptText="Придумайте логин"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Пароль:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="passwordField" promptText="Придумайте пароль"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Повтор пароля:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="confirmPasswordField" promptText="Повторите пароль"
+                           GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <!-- Кнопки действия -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Зарегистрироваться" onAction="#onRegister"/>
+            <Button text="Отмена" onAction="#onCancel"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

@@ -35,6 +35,12 @@
             <version>17.0.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
         <!-- JPA API + Hibernate -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
@@ -75,7 +81,6 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                <!--                                com.myairline.airline_reservation/com.myairline.airline_reservation.app.HelloApplication-->
                                 com.myairline.airline_reservation.app.MainApp
                             </mainClass>
                             <launcher>app</launcher>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.myairline.airline_reservation.ui.UserController"
+            prefWidth="800" prefHeight="600">
+    <!-- Растягиваем VBox на всю область -->
+    <VBox spacing="10"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          styleClass="section-pane">
+
+        <Label text="Управление пользователями" styleClass="login-title"/>
+
+        <HBox spacing="10" VBox.vgrow="ALWAYS">
+            <!-- Список пользователей -->
+            <ListView fx:id="userList" HBox.hgrow="ALWAYS"/>
+
+            <!-- Форма и кнопки -->
+            <VBox spacing="6">
+                <TextField fx:id="usernameField" promptText="Логин"/>
+                <PasswordField fx:id="passwordField" promptText="Пароль"/>
+                <ComboBox fx:id="roleCombo"/>
+                <Button text="Добавить" onAction="#onAddUser" maxWidth="Infinity"/>
+                <Button text="Удалить" onAction="#onDeleteUser" maxWidth="Infinity"/>
+                <Region VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</AnchorPane>

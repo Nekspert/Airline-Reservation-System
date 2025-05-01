@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.myairline.airline_reservation.ui.LoginController"
+            styleClass="root-pane">
+    <!-- Центрируем форму авторизации -->
+    <VBox spacing="20" alignment="CENTER"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- Заголовок окна -->
+        <Label text="Вход в систему" styleClass="login-title"/>
+
+        <!-- Форма ввода -->
+        <GridPane hgap="10" vgap="10" alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="NEVER"/>
+                <RowConstraints vgrow="NEVER"/>
+            </rowConstraints>
+
+            <Label text="Имя пользователя:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="usernameField" promptText="Введите имя пользователя"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Пароль:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="passwordField" promptText="Введите пароль"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <!-- Кнопка входа -->
+        <Button text="Войти" onAction="#onLogin" minWidth="100"/>
+
+        <!-- Ссылка на регистрацию (опционально) -->
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Нет аккаунта?"/>
+            <Hyperlink text="Регистрация" onAction="#onRegister"/>
+        </HBox>
+    </VBox>
+</AnchorPane>
