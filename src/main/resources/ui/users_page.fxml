@@ -11,7 +11,7 @@
           AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
           styleClass="section-pane">
 
-        <Label text="Управление пользователями" styleClass="login-title"/>
+        <Label text="Управление пользователями" styleClass="general-title"/>
 
         <HBox spacing="10" VBox.vgrow="ALWAYS">
             <!-- Список пользователей -->

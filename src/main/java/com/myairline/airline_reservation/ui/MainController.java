@@ -3,10 +3,7 @@ package com.myairline.airline_reservation.ui;
 import com.myairline.airline_reservation.app.MainApp;
 import com.myairline.airline_reservation.init.AppSession;
 import com.myairline.airline_reservation.model.user.User;
-import com.myairline.airline_reservation.service.FlightService;
-import com.myairline.airline_reservation.service.RouteService;
-import com.myairline.airline_reservation.service.TariffService;
-import com.myairline.airline_reservation.service.UserService;
+import com.myairline.airline_reservation.service.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
@@ -35,13 +32,16 @@ public class MainController {
     private final RouteService  routeService;
     private final TariffService tariffService;
     private final UserService userService;
+    private final TicketService ticketService;
 
     // Конструктор вызывается из MainApp через controllerFactory
-    public MainController(FlightService flightService, RouteService routeService, TariffService tariffService, UserService userService) {
+    public MainController(FlightService flightService, RouteService routeService, TariffService tariffService,
+                          UserService userService, TicketService ticketService) {
         this.flightService = flightService;
         this.routeService  = routeService;
         this.tariffService = tariffService;
         this.userService = userService;
+        this.ticketService = ticketService;
     }
 
     @FXML
@@ -54,16 +54,20 @@ public class MainController {
         items.add("Тарифы");
 
         if (user.isAdmin()) {
-            items.addAll(List.of("Пользователи", "Все бронирования", "Все билеты", "Все платежи"));
+            items.addAll(List.of(
+                    "Пользователи",
+                    "Все бронирования",
+                    "Все билеты",    // <-- для админа
+                    "Все платежи"
+            ));
         } else {
-            items.addAll(List.of("Мои бронирования", "Мои билеты", "Мои платежи"));
+            items.addAll(List.of(
+                    "Мои бронирования",
+                    "Мои билеты",    // <-- для пассажира
+                    "Мои платежи"
+            ));
         }
         navList.getItems().setAll(items);
-        //        navList.getItems().setAll(
-        //                "Рейсы", "Маршруты", "Бронирования",
-        //                "Пользователи", "Билеты", "Платежи",
-        //                "Тарифы"
-        //        );
 
         // Слушатель для переключения разделов
         navList.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
@@ -91,6 +95,8 @@ public class MainController {
                     case "Маршруты" -> new RouteController(routeService);
                     case "Тарифы" -> new TariffController(tariffService);
                     case "Пользователи" -> new UserController(userService);
+                    case "Все билеты", "Мои билеты" ->
+                            new TicketController(ticketService, flightService, tariffService, userService);
 
                     // TODO: добавить другие разделы по аналогии:
                     // case "Бронирования": return new BookingController(...);
@@ -100,7 +106,6 @@ public class MainController {
             Parent view = loader.load();
             contentPane.getChildren().add(view);
         } catch (IOException e) {
-            // на реальном проекте логгируйте и/или показывайте Alert
             throw new RuntimeException("Не удалось загрузить раздел " + section, e);
         }
     }
@@ -109,11 +114,13 @@ public class MainController {
         return switch (section) {
             case "Рейсы" -> "flight_page.fxml";
             case "Маршруты" -> "route_page.fxml";
-            case "Бронирования" -> "booking_page.fxml";
+            case "Тарифы" -> "tariff_page.fxml";
             case "Пользователи" -> "users_page.fxml";
-            case "Билеты" -> "ticket_page.fxml";
-            case "Платежи" -> "payment_page.fxml";
-            case "Тарифы"     -> "tariff_page.fxml";
+            case "Все билеты",
+                 "Мои билеты" -> "ticket_page.fxml";
+            case "Все бронирования",
+                 "Мои бронирования" -> "booking_page.fxml";
+            case "Все платежи", "Мои платежи" -> "payment_page.fxml";
             default -> throw new IllegalArgumentException("Неизвестный раздел: " + section);
         };
     }

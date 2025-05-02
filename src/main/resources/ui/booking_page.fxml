@@ -1,0 +1,19 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="…BookingController">
+    <Label text="Бронирования" styleClass="section-pane"/>
+    <HBox spacing="8">
+        <ComboBox fx:id="flightCombo" promptText="Рейс"/>
+        <TextField fx:id="countField" promptText="Кол‑во мест"/>
+        <Button text="Забронировать" onAction="#onBook"/>
+    </HBox>
+    <TableView fx:id="bookingTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="ID" fx:id="colBookId"/>
+            <TableColumn text="Рейс" fx:id="colBookFlight"/>
+            <TableColumn text="Пассажир" fx:id="colBookPass"/>
+            <TableColumn text="Дата" fx:id="colBookDate"/>
+        </columns>
+    </TableView>
+</VBox>

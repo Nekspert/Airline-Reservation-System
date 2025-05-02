@@ -12,7 +12,7 @@
           styleClass="root-pane">
 
         <!-- Заголовок страницы -->
-        <Label text="Управление тарифами" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <Label text="Управление тарифами" styleClass="general-title"/>
 
         <!-- Контент: форма и список -->
         <HBox spacing="10" VBox.vgrow="ALWAYS">

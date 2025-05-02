@@ -1,0 +1,15 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="…PaymentController">
+    <Label text="Платежи" styleClass="section-pane"/>
+    <TableView fx:id="paymentTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="ID" fx:id="colPayId"/>
+            <TableColumn text="Бронь" fx:id="colPayBook"/>
+            <TableColumn text="Сумма" fx:id="colPayAmount"/>
+            <TableColumn text="Статус" fx:id="colPayStatus"/>
+            <TableColumn text="Дата" fx:id="colPayDate"/>
+            <TableColumn text="Действие" fx:id="colPayAction"/>
+        </columns>
+    </TableView>
+</VBox>

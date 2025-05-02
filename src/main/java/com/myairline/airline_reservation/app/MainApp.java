@@ -1,15 +1,9 @@
 package com.myairline.airline_reservation.app;
 
-import com.myairline.airline_reservation.dao.FlightDAO;
-import com.myairline.airline_reservation.dao.RouteDAO;
-import com.myairline.airline_reservation.dao.TariffDAO;
-import com.myairline.airline_reservation.dao.UserDAO;
+import com.myairline.airline_reservation.dao.*;
 import com.myairline.airline_reservation.init.AppSession;
 import com.myairline.airline_reservation.init.DataInitializer;
-import com.myairline.airline_reservation.service.FlightService;
-import com.myairline.airline_reservation.service.RouteService;
-import com.myairline.airline_reservation.service.TariffService;
-import com.myairline.airline_reservation.service.UserService;
+import com.myairline.airline_reservation.service.*;
 import com.myairline.airline_reservation.ui.*;
 import com.myairline.airline_reservation.utils.JPAUtil;
 import jakarta.persistence.EntityManagerFactory;
@@ -29,6 +23,7 @@ public class MainApp extends Application {
     private FlightService flightService;
     private RouteService routeService;
     private TariffService tariffService;
+    private TicketService ticketService;
     private final AppSession session = AppSession.get();
 
     public MainApp() {
@@ -52,6 +47,7 @@ public class MainApp extends Application {
         this.flightService = new FlightService(new FlightDAO(em));
         this.routeService = new RouteService(new RouteDAO(em));
         this.tariffService = new TariffService(new TariffDAO(em));
+        this.ticketService = new TicketService(new TicketDAO(em));
     }
 
 
@@ -101,7 +97,7 @@ public class MainApp extends Application {
                 return new RegisterController(userService);
             }
             if (clazz == MainController.class) {
-                return new MainController(flightService, routeService, tariffService, userService);
+                return new MainController(flightService, routeService, tariffService, userService, ticketService);
             }
             if (clazz == FlightController.class) {
                 return new FlightController(flightService, routeService);
@@ -117,6 +113,9 @@ public class MainApp extends Application {
             }
             if (clazz == SettingsController.class) {
                 return new SettingsController();
+            }
+            if (clazz == TicketController.class) {
+                return new TicketController(ticketService, flightService, tariffService, userService);
             }
             throw new IllegalStateException("Unexpected controller: " + clazz);
         });

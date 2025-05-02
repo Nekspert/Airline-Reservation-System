@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.myairline.airline_reservation.ui.TicketController"
+      styleClass="section-pane">
+
+    <Label text="Билеты" styleClass="general-title"/>
+
+    <!-- только для админа: фильтр по пользователям -->
+    <HBox fx:id="adminFilterBox" spacing="8">
+        <Label text="Пассажир:"/>
+        <ComboBox fx:id="userCombo" promptText="Выберите пассажира"/>
+    </HBox>
+
+    <!-- только для пассажира: форма покупки -->
+    <HBox fx:id="purchaseBox" spacing="8">
+        <ComboBox fx:id="flightCombo" promptText="Рейс"/>
+        <ComboBox fx:id="tariffCombo" promptText="Тариф"/>
+        <Button text="Купить" onAction="#onBuyTicket"/>
+    </HBox>
+
+    <TableView fx:id="ticketTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="ID"    fx:id="colId"       prefWidth="50"/>
+            <TableColumn text="Рейс"  fx:id="colFlight"   prefWidth="300"/>
+            <TableColumn text="Тариф" fx:id="colTariff"   prefWidth="200"/>
+            <TableColumn text="Цена"  fx:id="colPrice"    prefWidth="100"/>
+            <TableColumn text="Действие" fx:id="colAction" prefWidth="150"/>
+        </columns>
+    </TableView>
+</VBox>

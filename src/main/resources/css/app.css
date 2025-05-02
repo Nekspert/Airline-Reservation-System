@@ -38,7 +38,7 @@
 }
 
 /* Заголовок окна входа */
-.login-title {
+.general-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: #2c3e50;
