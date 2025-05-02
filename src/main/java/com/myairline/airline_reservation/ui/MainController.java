@@ -1,5 +1,6 @@
 package com.myairline.airline_reservation.ui;
 
+import com.myairline.airline_reservation.app.MainApp;
 import com.myairline.airline_reservation.init.AppSession;
 import com.myairline.airline_reservation.model.user.User;
 import com.myairline.airline_reservation.service.FlightService;
@@ -8,10 +9,15 @@ import com.myairline.airline_reservation.service.TariffService;
 import com.myairline.airline_reservation.service.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +28,8 @@ public class MainController {
     private ListView<String> navList;
     @FXML
     private StackPane contentPane;
+    @FXML
+    private Button settingsBtn;
 
     private final FlightService flightService;
     private final RouteService  routeService;
@@ -119,11 +127,33 @@ public class MainController {
 
     @FXML
     public void onSettings() {
-        // заглушка: покажем диалог с настройками
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Settings");
-        alert.setHeaderText("Настройки приложения");
-        alert.setContentText("Здесь будут ваши настройки.");
-        alert.showAndWait();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/settings_page.fxml"));
+            MainApp.getInstance().controllerLoader(loader);
+            Parent pane = loader.load();
+
+            // Создаем Popup
+            Popup popup = new Popup();
+            popup.getContent().add(pane);
+            popup.setAutoHide(true);
+
+            // Передаем Popup контроллеру, чтобы он мог его закрыть
+            SettingsController ctrl = loader.getController();
+            ctrl.setPopup(popup);
+
+            // вычисляем ширину и координаты
+            double popupWidth = pane.prefWidth(-1);
+            if (popupWidth <= 0) popupWidth = pane.getLayoutBounds().getWidth();
+            Bounds btnBounds = settingsBtn.localToScreen(settingsBtn.getBoundsInLocal());
+            double anchorX = btnBounds.getMaxX() - popupWidth;
+            double anchorY = btnBounds.getMaxY();
+
+            Stage owner = MainApp.getInstance().getPrimaryStage();
+            popup.show(owner, anchorX, anchorY);
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Не удалось открыть панель настроек",
+                    ButtonType.OK).showAndWait();
+        }
     }
 }

@@ -64,16 +64,17 @@ public class MainApp extends Application {
     /**
      * Показываем экран логина
      */
-    private void showLoginWindow() throws IOException {
+    public void showLoginWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/login.fxml"));
         this.controllerLoader(loader);
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(Objects
                 .requireNonNull(getClass().getResource("/css/app.css"))
                 .toExternalForm());
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Вход в систему");
-        primaryStage.show();
+        getPrimaryStage().setScene(scene);
+        getPrimaryStage().setTitle("Вход в систему");
+        getPrimaryStage().centerOnScreen();
+        getPrimaryStage().show();
     }
 
     /**
@@ -86,12 +87,12 @@ public class MainApp extends Application {
         scene.getStylesheets().add(Objects
                 .requireNonNull(getClass().getResource("/css/app.css"))
                 .toExternalForm());
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Airline Reservations");
-        primaryStage.centerOnScreen();
+        getPrimaryStage().setScene(scene);
+        getPrimaryStage().setTitle("Airline Reservations");
+        getPrimaryStage().centerOnScreen();
     }
 
-    private void controllerLoader(FXMLLoader loader) {
+    public void controllerLoader(FXMLLoader loader) {
         loader.setControllerFactory(clazz -> {
             if (clazz == LoginController.class) {
                 return new LoginController(userService, session);
@@ -114,6 +115,9 @@ public class MainApp extends Application {
             if (clazz == UserController.class) {
                 return new UserController(userService);
             }
+            if (clazz == SettingsController.class) {
+                return new SettingsController();
+            }
             throw new IllegalStateException("Unexpected controller: " + clazz);
         });
     }
@@ -125,5 +129,9 @@ public class MainApp extends Application {
 
     public static void main(String[] args) {
         launch();
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 }
