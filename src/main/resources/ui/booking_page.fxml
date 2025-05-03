@@ -1,19 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="…BookingController">
-    <Label text="Бронирования" styleClass="section-pane"/>
-    <HBox spacing="8">
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.myairline.airline_reservation.ui.BookingController"
+      styleClass="section-pane">
+
+    <Label text="Бронирования" styleClass="general-title"/>
+
+    <!-- админ может фильтровать по пассажиру -->
+    <HBox fx:id="adminFilterBox" spacing="8">
+        <Label text="Пассажир:"/>
+        <ComboBox fx:id="userCombo" promptText="Выберите пассажира"/>
+    </HBox>
+
+    <!-- пассажирская форма -->
+    <HBox fx:id="purchaseBox" spacing="8">
         <ComboBox fx:id="flightCombo" promptText="Рейс"/>
-        <TextField fx:id="countField" promptText="Кол‑во мест"/>
+        <!-- тарифы -->
+        <ComboBox fx:id="tariffCombo" promptText="Тариф"/>
         <Button text="Забронировать" onAction="#onBook"/>
     </HBox>
+
+
+
     <TableView fx:id="bookingTable" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="ID" fx:id="colBookId"/>
-            <TableColumn text="Рейс" fx:id="colBookFlight"/>
-            <TableColumn text="Пассажир" fx:id="colBookPass"/>
-            <TableColumn text="Дата" fx:id="colBookDate"/>
+            <TableColumn text="ID"        fx:id="colBId"      prefWidth="50"/>
+            <TableColumn text="Рейс"      fx:id="colBFlight"  prefWidth="450"/>
+            <TableColumn text="Билеты"    fx:id="colBTickets" prefWidth="100"/>
+            <TableColumn text="Дата"      fx:id="colBDate"    prefWidth="250"/>
+            <TableColumn text="Действие"  fx:id="colBAction"  prefWidth="135"/>
         </columns>
     </TableView>
 </VBox>

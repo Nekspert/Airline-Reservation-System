@@ -16,13 +16,13 @@ public class TicketService {
         this.dao = dao;
     }
 
-    public void createTicket(User buyer, Flight f, Tariff t, BigDecimal price) {
+    public Ticket createTicket(User passenger, Flight flight, Tariff tariff, BigDecimal price) {
         Ticket tk = new Ticket();
-        tk.setFlight(f);
-        tk.setTariff(t);
-        tk.setPassenger(buyer);
+        tk.setPassenger(passenger);
+        tk.setFlight(flight);
+        tk.setTariff(tariff);
         tk.setPrice(price);
-        dao.save(tk);
+        return dao.save(tk);
     }
 
     public List<Ticket> getFor(User u) {

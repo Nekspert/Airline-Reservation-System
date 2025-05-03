@@ -17,9 +17,10 @@ public class TicketDAO {
     public Ticket save(Ticket ticket) {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        em.persist(ticket);
+        Ticket persisted = em.merge(ticket);
         tx.commit();
-        return ticket;
+        em.clear();
+        return persisted;
     }
 
     public List<Ticket> findByPassenger(User user) {
@@ -27,6 +28,7 @@ public class TicketDAO {
                 .setParameter("username", user.getUsername())
                 .getResultList();
     }
+
 
     public List<Ticket> findAll() {
         return em.createQuery("SELECT t FROM Ticket t", Ticket.class)

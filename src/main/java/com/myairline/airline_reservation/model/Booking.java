@@ -20,7 +20,9 @@ public class Booking {
     @ManyToOne(optional = false)
     private Flight flight;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "booking",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<Ticket> tickets = new ArrayList<>();
 
     private LocalDateTime bookedAt = LocalDateTime.now();

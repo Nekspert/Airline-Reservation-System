@@ -20,8 +20,12 @@ public class Ticket {
     @ManyToOne(optional = false)
     private Tariff tariff;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private User passenger;
+
+    @ManyToOne(optional=false)
+    @JoinColumn(name="booking_id")
+    private Booking booking;
 
     private BigDecimal price;
 
@@ -63,5 +67,12 @@ public class Ticket {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 }

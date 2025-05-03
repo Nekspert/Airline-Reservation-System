@@ -33,15 +33,20 @@ public class MainController {
     private final TariffService tariffService;
     private final UserService userService;
     private final TicketService ticketService;
+    private final BookingService bookingService;
+    private final PaymentService paymentService;
 
     // Конструктор вызывается из MainApp через controllerFactory
     public MainController(FlightService flightService, RouteService routeService, TariffService tariffService,
-                          UserService userService, TicketService ticketService) {
+                          UserService userService, TicketService ticketService, BookingService bookingService,
+                          PaymentService paymentService) {
         this.flightService = flightService;
         this.routeService  = routeService;
         this.tariffService = tariffService;
         this.userService = userService;
         this.ticketService = ticketService;
+        this.bookingService = bookingService;
+        this.paymentService = paymentService;
     }
 
     @FXML
@@ -57,13 +62,13 @@ public class MainController {
             items.addAll(List.of(
                     "Пользователи",
                     "Все бронирования",
-                    "Все билеты",    // <-- для админа
+                    "Все билеты",
                     "Все платежи"
             ));
         } else {
             items.addAll(List.of(
                     "Мои бронирования",
-                    "Мои билеты",    // <-- для пассажира
+                    "Мои билеты",
                     "Мои платежи"
             ));
         }
@@ -96,10 +101,12 @@ public class MainController {
                     case "Тарифы" -> new TariffController(tariffService);
                     case "Пользователи" -> new UserController(userService);
                     case "Все билеты", "Мои билеты" ->
-                            new TicketController(ticketService, flightService, tariffService, userService);
+                            new TicketController(ticketService);
+                    case "Все бронирования", "Мои бронирования" ->
+                            new BookingController(bookingService, flightService, userService, tariffService);
+                    case "Все платежи", "Мои платежи" -> new PaymentController(paymentService, userService);
 
-                    // TODO: добавить другие разделы по аналогии:
-                    // case "Бронирования": return new BookingController(...);
+
                     default -> throw new IllegalStateException("Нет контроллера для раздела " + section);
                 };
             });
@@ -121,6 +128,7 @@ public class MainController {
             case "Все бронирования",
                  "Мои бронирования" -> "booking_page.fxml";
             case "Все платежи", "Мои платежи" -> "payment_page.fxml";
+
             default -> throw new IllegalArgumentException("Неизвестный раздел: " + section);
         };
     }
@@ -162,5 +170,9 @@ public class MainController {
                     "Не удалось открыть панель настроек",
                     ButtonType.OK).showAndWait();
         }
+    }
+
+    public void selectSection(String name) {
+        navList.getSelectionModel().select(name);
     }
 }
