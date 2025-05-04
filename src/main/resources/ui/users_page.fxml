@@ -21,9 +21,13 @@
             <VBox spacing="6">
                 <TextField fx:id="usernameField" promptText="Логин"/>
                 <PasswordField fx:id="passwordField" promptText="Пароль"/>
-                <ComboBox fx:id="roleCombo"/>
+                <ComboBox fx:id="roleCombo" promptText="Роль при добавлении"/>
                 <Button text="Добавить" onAction="#onAddUser" maxWidth="Infinity"/>
                 <Button text="Удалить" onAction="#onDeleteUser" maxWidth="Infinity"/>
+                <Separator />
+                <Label text="Сменить роль выбранного:"/>
+                <ComboBox fx:id="roleSelectCombo" promptText="Новая роль"/>
+                <Button fx:id="changeRoleBtn" text="Сменить роль" onAction="#onChangeRole" maxWidth="Infinity"/>
                 <Region VBox.vgrow="ALWAYS"/>
             </VBox>
         </HBox>
