@@ -52,8 +52,8 @@ public class MainApp extends Application {
         this.routeService = new RouteService(new RouteDAO(em));
         this.tariffService = new TariffService(new TariffDAO(em));
         this.ticketService = new TicketService(new TicketDAO(em));
-        this.bookingService = new BookingService(new BookingDAO(em));
-        this.paymentService = new PaymentService(new PaymentDAO(em));
+        this.bookingService = new BookingService(new BookingDAO(em), new PaymentDAO(em));
+        this.paymentService = new PaymentService(new PaymentDAO(em), new UserDAO(em));
     }
 
 
@@ -126,10 +126,10 @@ public class MainApp extends Application {
                 return new SettingsController();
             }
             if (clazz == TicketController.class) {
-                return new TicketController(ticketService);
+                return new TicketController(ticketService, userService);
             }
             if (clazz == BookingController.class) {
-                return new BookingController(bookingService, flightService, userService, tariffService);
+                return new BookingController(bookingService, flightService, userService, tariffService, paymentService);
             }
             if (clazz == PaymentController.class) {
                 return new PaymentController(paymentService, userService);

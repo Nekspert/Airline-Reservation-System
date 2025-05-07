@@ -1,5 +1,6 @@
 package com.myairline.airline_reservation.model;
 
+import com.myairline.airline_reservation.model.user.User;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -12,28 +13,47 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = true)
+    @JoinColumn(name = "booking_id", nullable = true)
     private Booking booking;
 
+    @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(nullable = false)
     private LocalDateTime paidAt;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+    @Column(nullable = false)
+    private Type type;
 
-    public enum PaymentStatus {
-        PENDING,
-        PAID,
-        FAILED
-    }
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public enum Type {REPLENISHMENT, PURCHASE}
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public Booking getBooking() {
@@ -52,19 +72,12 @@ public class Payment {
         this.amount = amount;
     }
 
-    public LocalDateTime getPaidAt() {
+    public LocalDateTime getAt() {
         return paidAt;
     }
 
-    public void setPaidAt(LocalDateTime paidAt) {
+    public void setAt(LocalDateTime paidAt) {
         this.paidAt = paidAt;
     }
 
-    public PaymentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(PaymentStatus status) {
-        this.status = status;
-    }
 }

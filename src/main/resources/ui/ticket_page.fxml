@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.layout.*?>
 <VBox spacing="10" xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.myairline.airline_reservation.ui.TicketController"
       styleClass="section-pane">
 
     <Label text="Билеты" styleClass="general-title"/>
+
+    <HBox spacing="8" fx:id="adminFilterBox">
+        <Label text="Пассажир:"/>
+        <ComboBox fx:id="userCombo" promptText="Выберите пользователя"/>
+    </HBox>
 
     <!-- Кнопка-переход в раздел бронирования -->
     <Button text="Забронировать билет"

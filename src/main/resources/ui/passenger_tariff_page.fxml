@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.myairline.airline_reservation.ui.PassengerTariffController"
+            prefWidth="600" prefHeight="400"
+            styleClass="section-pane">
+    <VBox spacing="10"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <Label text="Доступные тарифы" styleClass="general-title"/>
+        <TableView fx:id="tariffTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colIndex" text="№" prefWidth="50"/>
+                <TableColumn fx:id="colName" text="Название" prefWidth="150"/>
+                <TableColumn fx:id="colPrice" text="Стоимость" prefWidth="100"/>
+                <TableColumn fx:id="colDesc" text="Описание" prefWidth="300"/>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>

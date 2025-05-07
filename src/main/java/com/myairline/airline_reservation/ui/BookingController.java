@@ -39,6 +39,7 @@ public class BookingController {
     private TableColumn<Booking, Void> colBAction;
 
     private final BookingService bookingService;
+    private final PaymentService paymentService;
     private final FlightService flightService;
     private final TariffService tariffService;
     private final UserService userService;
@@ -46,11 +47,13 @@ public class BookingController {
     public BookingController(BookingService bs,
                              FlightService fs,
                              UserService us,
-                             TariffService tariffService) {
+                             TariffService tariffService,
+                             PaymentService paymentService) {
         this.bookingService = bs;
         this.flightService = fs;
         this.userService = us;
         this.tariffService = tariffService;
+        this.paymentService = paymentService;
     }
 
     @FXML
@@ -95,11 +98,15 @@ public class BookingController {
             return;
         }
         User current = AppSession.get().getCurrentUser();
+        if (t.getBasePrice().compareTo(current.getBalance()) > 0) {
+            new Alert(Alert.AlertType.WARNING, "Вашего баланса не достаточно для покупки").showAndWait();
+            return;
+        }
         // если админ — берём пассажира из комбобокса, иначе себя
         User passenger = current.isAdmin() ? userCombo.getValue() : current;
 
         // создаём бронь (с одним билетом внутри) для выбранного пассажира
-        bookingService.createBooking(passenger, f, t);
+        bookingService.createBooking(passenger, f, t, paymentService);
         refresh();
     }
 

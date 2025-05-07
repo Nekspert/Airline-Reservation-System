@@ -27,6 +27,7 @@
 
 
 .nav-title {
+    -fx-padding: 10;
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -53,4 +54,20 @@
 .button {
     -fx-background-radius: 4px;
     -fx-padding: 8 16;
+}
+
+.highlight {
+    -fx-text-fill: #27ae60;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: #eafaf1;
+    -fx-padding: 4 8;
+    -fx-background-radius: 4px;
+}
+
+.debit-cell {
+    -fx-text-fill: red;
+}
+.credit-cell {
+    -fx-text-fill: green;
 }

@@ -2,6 +2,8 @@ package com.myairline.airline_reservation.model.user;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -11,6 +13,9 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private BigDecimal balance;
 
     @Column(nullable = false)
     private String passwordHash;
@@ -26,6 +31,7 @@ public class User {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
+        this.balance = BigDecimal.ZERO;
     }
 
     public Long getId() {
@@ -38,6 +44,14 @@ public class User {
 
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void adjustBalance(BigDecimal delta) {
+        this.balance = delta.add(this.balance);
     }
 
     public Role getRole() {

@@ -45,7 +45,7 @@ public class UserDAO {
     }
 
     public List<User> findAll() {
-        return em.createQuery("SELECT u FROM User u", User.class).getResultList();
+        return em.createQuery("SELECT u FROM User u ORDER BY u.id ASC", User.class).getResultList();
     }
 
     public void deleteById(Long id) {

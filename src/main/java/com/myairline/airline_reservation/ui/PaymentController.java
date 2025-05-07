@@ -1,6 +1,7 @@
 package com.myairline.airline_reservation.ui;
 
 import com.myairline.airline_reservation.init.AppSession;
+import com.myairline.airline_reservation.model.Booking;
 import com.myairline.airline_reservation.model.Payment;
 import com.myairline.airline_reservation.model.user.User;
 import com.myairline.airline_reservation.service.PaymentService;
@@ -8,35 +9,37 @@ import com.myairline.airline_reservation.service.UserService;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.util.Callback;
+import javafx.scene.layout.VBox;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 public class PaymentController {
     @FXML
-    private HBox adminFilterBox;
+    private VBox adminFilterBox;
     @FXML
     private ComboBox<User> userCombo;
-    @FXML
-    private Button payAllBtn;
+
     @FXML
     private TableView<Payment> paymentTable;
     @FXML
-    private TableColumn<Payment, Long> colPayId;
+    private TableColumn<Payment, Long> colId;
     @FXML
-    private TableColumn<Payment, String> colPayBook;
+    private TableColumn<Payment, Payment.Type> colType;
     @FXML
-    private TableColumn<Payment, Number> colPayAmount;
+    private TableColumn<Payment, Number> colAmount;
     @FXML
-    private TableColumn<Payment, Payment.PaymentStatus> colPayStatus;
+    private TableColumn<Payment, String> colBooking;
     @FXML
-    private TableColumn<Payment, String> colPayDate;
+    private TableColumn<Payment, String> colDate;
+
     @FXML
-    private TableColumn<Payment, Void> colPayAction;
+    private Label balanceLabel;
+    @FXML
+    private TextField amountField;
 
     private final PaymentService paymentService;
     private final UserService userService;
+    private User current;
 
     public PaymentController(PaymentService ps, UserService us) {
         this.paymentService = ps;
@@ -45,71 +48,82 @@ public class PaymentController {
 
     @FXML
     public void initialize() {
-        User current = AppSession.get().getCurrentUser();
+        current = AppSession.get().getCurrentUser();
         boolean isAdmin = current.isAdmin();
 
         adminFilterBox.setVisible(isAdmin);
-        payAllBtn.setVisible(!isAdmin);
-
         if (isAdmin) {
             userCombo.getItems().setAll(userService.findAll());
             userCombo.getSelectionModel().selectedItemProperty()
-                    .addListener((o, a, b) -> refresh());
+                    .addListener((obs, oldU, newU) -> refreshAll());
             userCombo.getSelectionModel().selectFirst();
-        } else {
-            payAllBtn.setOnAction(e -> {
-                // оплачиваем все PENDING
-                paymentService.getFor(current, current)
-                        .stream()
-                        .filter(p -> p.getStatus() == Payment.PaymentStatus.PENDING)
-                        .forEach(paymentService::confirmPayment);
-                refresh();
-            });
         }
 
-        colPayId.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getId()));
-        colPayBook.setCellValueFactory(c ->
-                new ReadOnlyObjectWrapper<>(c.getValue().getBooking().getId().toString()));
-        colPayAmount.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getAmount()));
-        colPayStatus.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getStatus()));
-        colPayDate.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(
-                c.getValue().getPaidAt() == null ? "-" : c.getValue().getPaidAt().toString()
-        ));
-        colPayAction.setCellFactory(makeActionCellFactory());
-
-        refresh();
-    }
-
-    private Callback<TableColumn<Payment, Void>, TableCell<Payment, Void>> makeActionCellFactory() {
-        return col -> new TableCell<>() {
-            private final Button btn = new Button("Удалить");
-
-            {
-                btn.setOnAction(e -> {
-                    Payment p = getTableView().getItems().get(getIndex());
-                    paymentService.deletePayment(p);
-                    refresh();
-                });
-            }
-
+        // --- настраиваем колонки истории ---
+        colAmount.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getAmount()));
+        colId.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getId()));
+        colType.setCellValueFactory(c -> new ReadOnlyObjectWrapper<>(c.getValue().getType()));
+        colBooking.setCellValueFactory(c -> {
+            Booking b = c.getValue().getBooking();
+            return new ReadOnlyObjectWrapper<>(b == null ? "-" : b.getId().toString());
+        });
+        colDate.setCellValueFactory(c ->
+                new ReadOnlyObjectWrapper<>(c.getValue().getAt().toString())
+        );
+        // оформить суммы цветом и знаком
+        colAmount.setCellFactory(col -> new TableCell<Payment, Number>() {
             @Override
-            protected void updateItem(Void it, boolean emp) {
-                super.updateItem(it, emp);
-                setGraphic(emp ? null : btn);
+            protected void updateItem(Number amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                    getStyleClass().removeAll("debit-cell", "credit-cell");
+                } else {
+                    Payment p = getTableView().getItems().get(getIndex());
+                    getStyleClass().removeAll("debit-cell", "credit-cell");
+                    if (p.getType() == Payment.Type.PURCHASE) {
+                        setText("-" + amount);
+                        getStyleClass().add("debit-cell");
+                    } else {
+                        setText("+" + amount);
+                        getStyleClass().add("credit-cell");
+                    }
+                }
             }
-        };
+        });
+
+        // первая загрузка
+        refreshAll();
     }
 
-    private void refresh() {
-        User current = AppSession.get().getCurrentUser();
-        List<Payment> data;
-        if (current.isAdmin()) {
-            User sel = userCombo.getValue();
-            data = paymentService.getFor(sel, current);
-        } else {
-            data = paymentService.getFor(current, current);
+    private void refreshAll() {
+        User filter = current.isAdmin() ? userCombo.getValue() : current;
+        // баланс всегда свой
+        balanceLabel.setText(filter.getBalance().toString());
+
+        // для админа — фильтруем по выбранному, иначе — свой
+        paymentTable.getItems().setAll(paymentService.history(filter));
+    }
+
+    @FXML
+    public void onRecharge() {
+        try {
+            User filter = current.isAdmin() ? userCombo.getValue() : current;
+            BigDecimal amt = new BigDecimal(amountField.getText());
+            if (amt.compareTo(BigDecimal.ZERO) < 1) {
+                new Alert(Alert.AlertType.WARNING, "Некорректная сумма").showAndWait();
+                return;
+            }
+            paymentService.recharge(filter, amt);
+            amountField.clear();
+            refreshAll();
+        } catch (NumberFormatException ex) {
+            new Alert(Alert.AlertType.WARNING, "Некорректная сумма").showAndWait();
         }
-        paymentTable.getItems().setAll(data);
     }
 
+    @FXML
+    public void onCancel() {
+        amountField.clear();
+    }
 }

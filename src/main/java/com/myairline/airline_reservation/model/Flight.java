@@ -69,6 +69,6 @@ public class Flight {
 
     @Override
     public String toString() {
-        return flightNumber + " (" + departureTime + " → " + arrivalTime + ")";
+        return route.toString() + " (" + departureTime + " → " + arrivalTime + ")";
     }
 }

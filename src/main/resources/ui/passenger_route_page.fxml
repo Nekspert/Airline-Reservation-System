@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.myairline.airline_reservation.ui.PassengerRouteController"
+      spacing="8"
+      styleClass="section-pane">
+    <Label text="Доступные маршруты" styleClass="general-title"/>
+    <ListView fx:id="routeList" prefHeight="300" VBox.vgrow="NEVER"/>
+
+    <!-- AnchorPane ensures the WebView fills its entire area -->
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <WebView fx:id="mapView"
+                 AnchorPane.topAnchor="0"
+                 AnchorPane.bottomAnchor="0"
+                 AnchorPane.leftAnchor="0"
+                 AnchorPane.rightAnchor="0"/>
+    </AnchorPane>
+</VBox>

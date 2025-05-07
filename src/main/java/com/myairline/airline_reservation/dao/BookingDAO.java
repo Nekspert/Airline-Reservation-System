@@ -14,7 +14,6 @@ public class BookingDAO {
         tx.begin();
         Booking merged = em.merge(b);
         tx.commit();
-        em.clear();
         return merged;
     }
 

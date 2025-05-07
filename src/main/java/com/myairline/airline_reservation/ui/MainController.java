@@ -54,10 +54,6 @@ public class MainController {
         User user = AppSession.get().getCurrentUser();
         List<String> items = new ArrayList<>();
 
-        items.add("Рейсы");
-        items.add("Маршруты");
-        items.add("Тарифы");
-
         if (user.isAdmin()) {
             items.addAll(List.of(
                     "Пользователи",
@@ -72,6 +68,9 @@ public class MainController {
                     "Мои платежи"
             ));
         }
+        items.add("Рейсы");
+        items.add("Маршруты");
+        items.add("Тарифы");
         navList.getItems().setAll(items);
 
         // Слушатель для переключения разделов
@@ -86,7 +85,27 @@ public class MainController {
 
     private void loadSection(String section) {
         contentPane.getChildren().clear();
-        String fxml = toFxmlName(section);
+
+        String fxml;
+        // pick FXML
+        if (section.equals("Рейсы")) {
+            boolean isAdmin = AppSession.get().getCurrentUser().isAdmin();
+            fxml = isAdmin
+                    ? "flight_page.fxml"
+                    : "passenger_flight_page.fxml";
+        } else if (section.equals("Маршруты")) {
+            boolean isAdmin = AppSession.get().getCurrentUser().isAdmin();
+            fxml = isAdmin
+                    ? "route_page.fxml"
+                    : "passenger_route_page.fxml";
+        } else if (section.equals("Тарифы")) {
+            boolean isAdmin = AppSession.get().getCurrentUser().isAdmin();
+            fxml = isAdmin
+                    ? "tariff_page.fxml"
+                    : "passenger_tariff_page.fxml";
+        } else {
+            fxml = toFxmlName(section);
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/" + fxml));
             loader.setControllerFactory(controllerClass -> {
@@ -96,14 +115,25 @@ public class MainController {
                 }
                 // Секции
                 return switch (section) {
-                    case "Рейсы" -> new FlightController(flightService, routeService);
-                    case "Маршруты" -> new RouteController(routeService);
-                    case "Тарифы" -> new TariffController(tariffService);
+                    case "Рейсы" -> {
+                        boolean isAdmin = AppSession.get().getCurrentUser().isAdmin();
+                        if (isAdmin) yield new FlightController(flightService, routeService);
+                        else yield new PassengerFlightController(flightService);
+                    }
+                    case "Маршруты" -> {
+                        boolean isAdmin = AppSession.get().getCurrentUser().isAdmin();
+                        if (isAdmin) yield new RouteController(routeService);
+                        else yield new PassengerRouteController(routeService);
+                    }
+                    case "Тарифы" -> {
+                        boolean isAdmin = AppSession.get().getCurrentUser().isAdmin();
+                        if (isAdmin) yield new TariffController(tariffService);
+                        else       yield new PassengerTariffController(tariffService);
+                    }
                     case "Пользователи" -> new UserController(userService);
-                    case "Все билеты", "Мои билеты" ->
-                            new TicketController(ticketService);
+                    case "Все билеты", "Мои билеты" -> new TicketController(ticketService, userService);
                     case "Все бронирования", "Мои бронирования" ->
-                            new BookingController(bookingService, flightService, userService, tariffService);
+                            new BookingController(bookingService, flightService, userService, tariffService, paymentService);
                     case "Все платежи", "Мои платежи" -> new PaymentController(paymentService, userService);
 
 
@@ -112,6 +142,7 @@ public class MainController {
             });
             Parent view = loader.load();
             contentPane.getChildren().add(view);
+
         } catch (IOException e) {
             throw new RuntimeException("Не удалось загрузить раздел " + section, e);
         }

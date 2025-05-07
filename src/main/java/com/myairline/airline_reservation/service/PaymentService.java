@@ -1,50 +1,71 @@
 package com.myairline.airline_reservation.service;
 
 import com.myairline.airline_reservation.dao.PaymentDAO;
+import com.myairline.airline_reservation.dao.UserDAO;
 import com.myairline.airline_reservation.model.Booking;
 import com.myairline.airline_reservation.model.Payment;
 import com.myairline.airline_reservation.model.Ticket;
 import com.myairline.airline_reservation.model.user.User;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PaymentService {
     private final PaymentDAO dao;
+    private final UserDAO userDao;
 
-    public PaymentService(PaymentDAO dao) {
+    public PaymentService(PaymentDAO dao, UserDAO userDao) {
         this.dao = dao;
+        this.userDao = userDao;
     }
 
-    public Payment initPayment(Booking b) {
-        Payment p = new Payment();
-        p.setBooking(b);
-        p.setAmount(b.getTickets()
-                .stream()
+    public List<Payment> listOperations(User u) {
+        return dao.findByUser(u);
+    }
+
+    public void recordDebit(Booking b, User u) {
+        BigDecimal total = b.getTickets().stream()
                 .map(Ticket::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
-        p.setStatus(Payment.PaymentStatus.PENDING);
-        return dao.save(p);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // списываем с баланса
+        u.adjustBalance(total.negate());
+        userDao.save(u);
+
+        // создаём «трату»
+        Payment p = new Payment();
+        p.setUser(u);
+        p.setBooking(b);
+        p.setType(Payment.Type.PURCHASE);
+        p.setAmount(total);
+        p.setAt(LocalDateTime.now());
+        dao.save(p);
     }
 
-    /**
-     * Для admin: первый аргумент — фильтрующий пользователь, второй — кто смотрит
-     */
-    public List<Payment> getFor(User filter, User current) {
-        if (current.isAdmin()) {
-            return filter == null
-                    ? dao.findAll()
-                    : dao.findByUser(filter);
-        } else {
-            return dao.findByUser(current);
-        }
+
+    public void recharge(User user, BigDecimal amount) {
+        // увеличиваем баланс
+        user.adjustBalance(amount);
+        userDao.save(user);
+
+        // сохраняем запись о пополнении
+        Payment p = new Payment();
+        p.setUser(user);
+        p.setType(Payment.Type.REPLENISHMENT);
+        p.setAmount(amount);
+        p.setAt(LocalDateTime.now());
+        p.setBooking(null);
+        dao.save(p);
     }
 
-    public void deletePayment(Payment p) {
+
+    public List<Payment> history(User u) {
+        return dao.findByUser(u);
+    }
+
+    public void delete(Payment p) {
         dao.delete(p);
     }
-
-    public void confirmPayment(Payment p) {
-        dao.confirm(p);
-    }
 }
+

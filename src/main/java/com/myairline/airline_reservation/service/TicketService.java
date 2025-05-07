@@ -26,11 +26,7 @@ public class TicketService {
     }
 
     public List<Ticket> getFor(User u) {
-        if (u.isAdmin()) {
-            return dao.findAll();
-        } else {
-            return dao.findByPassenger(u);
-        }
+        return dao.findByPassenger(u);
     }
 
     public void deleteTicket(Ticket t) {

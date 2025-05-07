@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.myairline.airline_reservation.ui.PassengerFlightController"
+      styleClass="section-pane">
+
+    <Label text="Доступные рейсы" styleClass="general-title"/>
+
+    <TableView fx:id="flightsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colNum"   text="№"/>
+            <TableColumn fx:id="colRoute" text="Маршрут" prefWidth="300"/>
+            <TableColumn fx:id="colDep"   text="Вылет"   prefWidth="300"/>
+            <TableColumn fx:id="colArr"   text="Прибытие" prefWidth="300"/>
+        </columns>
+    </TableView>
+</VBox>

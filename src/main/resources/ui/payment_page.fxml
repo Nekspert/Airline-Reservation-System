@@ -1,32 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<VBox spacing="10"
+<?import javafx.scene.layout.*?>
+<HBox spacing="20"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.myairline.airline_reservation.ui.PaymentController"
       styleClass="section-pane">
 
-    <!-- Фильтрация по пользователю (только для админа) -->
-    <HBox fx:id="adminFilterBox" spacing="8">
+    <!-- Админ-фильтр: Лейбл и ComboBox вертикально -->
+    <VBox fx:id="adminFilterBox" spacing="5">
         <Label text="Пользователь:"/>
-        <ComboBox fx:id="userCombo" promptText="Выберите пользователя"/>
-    </HBox>
+        <ComboBox fx:id="userCombo"
+                  promptText="Выберите пользователя"/>
+    </VBox>
 
-    <!-- Кнопка «Оплатить все» для пассажира -->
-    <Button fx:id="payAllBtn" text="Оплатить все PENDING"/>
+    <!-- Левая колонка: История транзакций -->
+    <VBox HBox.hgrow="ALWAYS">
+        <Label text="История транзакций"
+               styleClass="general-title"/>
+        <TableView fx:id="paymentTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="colType" text="Тип" prefWidth="130"/>
+                <TableColumn fx:id="colAmount" text="Сумма" prefWidth="130"/>
+                <TableColumn fx:id="colBooking" text="Бронь" prefWidth="50"/>
+                <TableColumn fx:id="colDate" text="Дата" prefWidth="250"/>
+            </columns>
+        </TableView>
+    </VBox>
 
-    <!-- Таблица платежей -->
-    <TableView fx:id="paymentTable" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="colPayId" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="colPayBook" text="Бронь" prefWidth="100"/>
-            <TableColumn fx:id="colPayAmount" text="Сумма" prefWidth="100"/>
-            <TableColumn fx:id="colPayStatus" text="Статус" prefWidth="100"/>
-            <TableColumn fx:id="colPayDate" text="Дата" prefWidth="150"/>
-            <TableColumn fx:id="colPayAction" text="Действие" prefWidth="100"/>
-        </columns>
-    </TableView>
-</VBox>
+    <!-- Правая колонка: Пополнение баланса -->
+    <VBox spacing="10"
+          prefWidth="300"
+          HBox.hgrow="ALWAYS">
+        <Label text="Пополнение&#10;баланса"
+               styleClass="general-title"/>
+        <Label text="Текущий баланс:"/>
+        <Label fx:id="balanceLabel"
+               text="0.00"
+               styleClass="highlight"/>
+        <Label text="Сумма"/>
+        <TextField fx:id="amountField"
+                   promptText="Введите сумму"/>
+        <HBox spacing="5">
+            <Button text="Пополнить"
+                    onAction="#onRecharge"
+                    HBox.hgrow="ALWAYS"/>
+            <Button text="Отмена"
+                    onAction="#onCancel"
+                    HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </VBox>
+
+</HBox>
